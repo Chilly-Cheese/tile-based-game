@@ -8,8 +8,7 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(YELLOW)
+        self.image = pg.image.load("Player.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -88,8 +87,7 @@ class Wall(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image = pg.image.load("Wall.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -101,8 +99,7 @@ class Exit(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.exits
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BLUE)
+        self.image = pg.image.load("Exit.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -114,8 +111,7 @@ class Lava(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.hazards
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(RED)
+        self.image = pg.image.load("Lava.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -127,8 +123,7 @@ class PortalOrange(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.orangePortals
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(ORANGE)
+        self.image = pg.image.load("OrangePortal.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -140,8 +135,7 @@ class PortalBlue(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.bluePortals
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(CYAN)
+        self.image = pg.image.load("BluePortal.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -153,8 +147,7 @@ class Box(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.boxes
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BOX)
+        self.image = pg.image.load("Box.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
