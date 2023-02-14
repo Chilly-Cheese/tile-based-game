@@ -161,6 +161,12 @@ class Box(pg.sprite.Sprite):
                 return True
         return False
     
+    def collide_with_lava(self, dx=0, dy=0):
+        for lava in self.game.hazards:
+            if lava.x == self.x + dx and lava.y == self.y + dy:
+                return True
+        return False
+    
     def collide_with_box(self, dx=0, dy=0):
         for box in self.game.boxes:
             if box.x == self.x + dx and box.y == self.y + dy:
@@ -170,8 +176,9 @@ class Box(pg.sprite.Sprite):
     def move(self, dx=0, dy=0):
         if not self.collide_with_walls(dx, dy):
             if not self.collide_with_box(dx, dy):
-                self.x += dx
-                self.y += dy
+                if not self.collide_with_lava(dx, dy):
+                    self.x += dx
+                    self.y += dy
         
     def update(self):
         self.rect.x = self.x * TILESIZE

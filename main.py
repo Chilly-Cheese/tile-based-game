@@ -126,6 +126,9 @@ class Game:
                     self.player.move(dy=-1)
                 if event.key == pg.K_DOWN:
                     self.player.move(dy=1)
+                if event.key == pg.K_r:
+                    self.cleanup()
+                    self.new()
 
     def show_start_screen(self):
         pass
