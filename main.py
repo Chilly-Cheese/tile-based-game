@@ -3,6 +3,7 @@ import sys
 from os import path
 from settings import *
 from sprites import *
+from tilemap import *
 
 class Game:
     def __init__(self):
@@ -22,19 +23,21 @@ class Game:
             for col in range(GRIDWIDTH):
                 self.background.blit(pg.image.load("FloorTile.png"), (col * TILESIZE, row * TILESIZE))
 
+    # function to load the map
     def load_map(self):
         global levelMaps
         global mapIndex
         game_folder = path.dirname(__file__)
-        self.map_data = []
-        with open(path.join(game_folder, levelMaps[mapIndex]), 'rt') as f:
-            for line in f:
-                self.map_data.append(line)
-        if mapIndex < (len(levelMaps)-1):
-            mapIndex += 1
-        else:
-            mapIndex = 0
+        self.map = Map(game_folder, levelMaps, mapIndex)
+    
+    # function to change to the next map at the end of a level
+    def next_map(self):
+        global levelMaps
+        global mapIndex
+        mapIndex = self.map.checkIndex(mapIndex, levelMaps)
+        self.load_map()
 
+    # setup for a new level
     def new(self):
         # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
@@ -44,7 +47,7 @@ class Game:
         self.bluePortals = pg.sprite.Group()
         self.orangePortals = pg.sprite.Group()
         self.boxes = pg.sprite.Group()
-        for row, tiles in enumerate(self.map_data):
+        for row, tiles in enumerate(self.map.map_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Wall(self, col, row)
@@ -60,7 +63,9 @@ class Game:
                     self.bluePortal = PortalBlue(self, col, row)
                 if tile == '@':
                     Box(self, col, row)
-                    
+            self.camera = Camera(self.map.width, self.map.height)
+                   
+    # end of level cleanup 
     def cleanup(self):
         for sprite in self.all_sprites:
             sprite.kill()
@@ -81,10 +86,12 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.camera.update(self.player)
         
+        # player checks
         if self.player.atExit:
             self.cleanup()
-            self.load_map()
+            self.next_map()
             self.new()
         if self.player.dead:
             self.cleanup()
@@ -97,7 +104,8 @@ class Game:
             self.player.y = self.bluePortal.y
             self.player.x = self.bluePortal.x + 1
             self.player.touchingOrange = False
-        
+    
+    # draw the gridlines
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
             pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
@@ -107,7 +115,8 @@ class Game:
     def draw(self):
         self.screen.blit(self.background, (0,0))
         self.draw_grid()
-        self.all_sprites.draw(self.screen)
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
         pg.display.flip()
 
     def events(self):
